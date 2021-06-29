@@ -1,22 +1,18 @@
 import React, { Component } from "react";
-import ManualCounter from "./components/ManualCounter.js";
+import ManualCounter from "./components/ManualCounter";
+import PatternForm from "./components/PatternForm";
+import InstructionView from "./components/InstructionView";
 
 class App extends Component {
-  constructor() {
-    super();
-
-    
+  render() {
+    return (
+      <div>
+        <InstructionView />
+        <ManualCounter />
+        <PatternForm />
+      </div>  
+    );
   }
-}
-
-
-function App() {
-  return (
-    <div>
-      <p>Hello World!</p>
-      <ManualCounter />
-    </div>  
-  );
 }
 
 export default App;
