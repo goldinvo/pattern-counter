@@ -1,4 +1,14 @@
-import ManualCounter from "./components/ManualCounter.js"
+import React, { Component } from "react";
+import ManualCounter from "./components/ManualCounter.js";
+
+class App extends Component {
+  constructor() {
+    super();
+
+    
+  }
+}
+
 
 function App() {
   return (
