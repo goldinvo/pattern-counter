@@ -73,16 +73,39 @@ function tokenize(pattern) {
         tokenArr.push(tokenFactory(TokenType.INSTR_CNT, tokenString[0] + tokenString[1]));
         index += 2;
     }
+    
+    // sequentially fill up with corresponding tokens 
     while (index < tokenString.length) {
       const tokType = mapToToken(tokenString[index]);
+      
+      // special case for '(info)' token
+      // early break iff detect (info)
+      if (tokType === TokenType.OPN_PAREN) {
+        const caseOne = tokenString[index] + tokenString[index + 1]; // '()'
+        const caseTwo = tokenString[index] + tokenString[index + 1] + tokenString[index + 2]; // '(blahblah)'
+        if (mapToToken(caseOne) === TokenType.INFO) {
+          tokenArr.push(tokenFactory(TokenType.INFO, caseOne));
+          index += 2;
+          continue;
+        } else if (mapToToken(caseTwo) === TokenType.INFO) {
+          tokenArr.push(tokenFactory(TokenType.INFO, caseTwo));
+          index += 3;
+          continue;
+        }
+      } 
+
+      // default case (not info)
       tokenArr.push(tokenFactory(tokType, tokenString[index]))
       index++;
+      
     }
     return tokenArr;
   }) 
 
   return ret;
 }
+
+
 
 
 export { PatternLexer };

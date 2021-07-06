@@ -11,7 +11,7 @@ const TokenType = Object.freeze({
 
 function mapToToken(str) {
   if (str.match(/^\d+\.$/)) return TokenType.INSTR_CNT; // special cases go first!!! 5) 5.  or  (info)
-  else if (str.match(/^\(.*\)$/)) return TokenType.INFO; 
+  else if (str.match(/(\(.*?\))/)) return TokenType.INFO; 
   else if (str === '(' || str === '{' || str === '[') return TokenType.OPN_PAREN; // ( { [
   else if (str === ')' || str === '}' || str === ']') return TokenType.CLS_PAREN; // ) ] }
   else if (str === '*') return TokenType.REP;

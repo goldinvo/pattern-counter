@@ -4,9 +4,9 @@ function tester() {
   console.log("====== tester ======");
 
   const testString = `
-    5. (SC 3, INC) x 6 (30)    
-    6. (SC 4, INC) x 6 (36) 
-    7. (SC 5, INC) x 6 (42) 
+    5. (SC 3, INC) * 6, sc 1 (give it a shot), sc 2 (30)    
+    6. (SC 4, INC) * 6 (36) 
+    7. (SC 5, INC) * 6 (42) 
     `;
 
   let lexer = new PatternLexer(testString);
