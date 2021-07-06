@@ -5,8 +5,6 @@ function tester() {
 
   const testString = `
     5. (SC 3, INC) x 6 (30)    
-  
-    
     6. (SC 4, INC) x 6 (36) 
     7. (SC 5, INC) x 6 (42) 
     `;
@@ -20,7 +18,7 @@ function tester() {
   do {
     console.log(`instruction ${i}`)
     do {
-      console.log(lexer.currentToken);
+      console.log(lexer.getCurrentToken());
     } while (lexer.advance());
     i++;
   } while (lexer.nextInstr());
