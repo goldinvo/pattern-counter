@@ -18,7 +18,7 @@ function tester() {
   do {
     console.log(`instruction ${i}`)
     do {
-      console.log(lexer.getCurrentToken());
+      console.log(lexer.currentToken);
     } while (lexer.advance());
     i++;
   } while (lexer.nextInstr());

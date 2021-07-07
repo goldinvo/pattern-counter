@@ -17,12 +17,20 @@ class PatternLexer {
     this._tokenIndex = 0;
   }
 
-  getCurrentToken() {
+  get currentToken() {
     return this._tokens[this._instrIndex][this._tokenIndex];
   }
 
-  getCurrentInstruction() {
+  get currentInstruction() {
     return this._tokens[this._instrIndex].slice();
+  }
+
+  get instrIndex() {
+    return this._instrIndex;
+  }
+
+  get tokenIndex() {
+    return this._tokenIndex;
   }
 
   setPosition(instrIndex, tokenIndex) {
@@ -41,6 +49,19 @@ class PatternLexer {
   nextInstr() {
     return this.setPosition(this._instrIndex + 1, 0);
   }
+
+  tokenAtIndex(i) {
+    return this._tokens[this._instrIndex][this._tokenIndex + 1]
+  }
+
+  nextStr() {
+    do {
+      if (!this.advance()) return false;
+    } while (this.currentToken.type !== TokenType.STR);
+    return true;
+  }
+
+
 
 }
 
@@ -112,4 +133,4 @@ function tokenize(pattern) {
 
 
 
-export { PatternLexer };
+export { PatternLexer, tokenize};
