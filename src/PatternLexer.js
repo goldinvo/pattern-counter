@@ -2,9 +2,9 @@ import {TokenType, mapToToken, tokenFactory} from './Token'
 
 // lexing interface for a given pattern string to be used by parser
 // ex) `                            [
-//     5. (SC 3, INC) x 6 (30)        ["5", ".", "(", "SC 3", ",", "INC", ")", "x", "6", "(", "30", ")"],  (instruction 0)
-//     6. (SC 4, INC) x 6 (36)  ==>   ["6", ".", "(", "SC 4", ",", "INC", ")", "x", "6", "(", "36", ")"],  (instruction 1)
-//     7. (SC 5, INC) x 6 (42)        ["7", ".", "(", "SC 5", ",", "INC", ")", "x", "6", "(", "42", ")"]   (instruction 2)
+//     5. (SC 3, INC) x 6 (30)        ["5.", "(", "SC 3", ",", "INC", ")", "x", "6", "(30)"],  (instruction 0)
+//     6. (SC 4, INC) x 6 (36)  ==>   ["6.", "(", "SC 4", ",", "INC", ")", "x", "6", "(36)"],  (instruction 1)
+//     7. (SC 5, INC) x 6 (42)        ["7.", "(", "SC 5", ",", "INC", ")", "x", "6", "(42)"]   (instruction 2)
 //     `                            ]
 //
 // currentToken: starts at first token of first instruction
@@ -19,6 +19,10 @@ class PatternLexer {
 
   getCurrentToken() {
     return this._tokens[this._instrIndex][this._tokenIndex];
+  }
+
+  getCurrentInstruction() {
+    return this._tokens[this._instrIndex].slice();
   }
 
   setPosition(instrIndex, tokenIndex) {
