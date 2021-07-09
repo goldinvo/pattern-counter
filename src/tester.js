@@ -1,4 +1,4 @@
-import { PatternLexer } from "./PatternLexer";
+import PatternLexer from "./PatternLexer";
 
 function tester() {
   console.log("====== tester ======");
@@ -9,20 +9,22 @@ function tester() {
     7. (SC 5, INC) * 6 (42) 
     `;
 
-  let lexer = new PatternLexer(testString);
+  let pattern = new PatternLexer.tokenize(testString);
   console.log("==LEXER STATE==");
-  console.log(lexer._tokens);
+  console.log(pattern);
 
   // iterate over tokens
   let i = 0;
+  let j = 0;
   do {
     console.log(`instruction ${i}`)
     do {
-      console.log(lexer.currentToken);
-    } while (lexer.advance());
+      console.log(pattern[i][j]);
+      j++;
+    } while (j < pattern[i].length);
     i++;
-  } while (lexer.nextInstr());
-
-
+    j = 0;
+  } while (i < pattern.length);
+  
 }
 export default tester;

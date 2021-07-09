@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import ManualCounter from "./components/ManualCounter";
 import PatternForm from "./components/PatternForm";
 import InstructionView from "./components/InstructionView";
-import { PatternLexer } from "./PatternLexer";
+import PatternLexer from "./PatternLexer";
 import {TokenType} from './Token'
 
 
@@ -12,14 +12,14 @@ class App extends Component {
     this.state = {
       patternInput: "",
       pattern: undefined,
-      instruction: 0,
-      tokenIndex: 0,
+      instrIndex: 0,
+      tokIndex: 0,
       finished: false,
       repeats: [],
     }
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.step = this.step.bind(this);
+    this.next = this.next.bind(this);
     this.nextInstruction = this.nextInstruction.bind(this);
   }
   
@@ -30,21 +30,19 @@ class App extends Component {
   handleSubmit(e) {
     e.preventDefault();
     
-    const pattern = new PatternLexer(this.state.patternInput);
-    if (pattern.currentToken.type !== TokenType.STR) {
-      pattern.nextStr();
-    }
+    const pattern = PatternLexer.tokenize(this.state.patternInput);
+    const tokenIndex = pattern[0][0].type !== TokenType.STR
+      ? PatternLexer.nextStr(pattern[0], 0)
+      : 0;
     this.setState({
       pattern: pattern,
-      instruction: 0,
-      tokenIndex: pattern.tokenIndex,
+      tokenIndex: tokenIndex,
     });
     
   }
 
-  step() {
+  next() {
     const pattern = this.state.pattern;
-    const index = pattern.tokenIndex;
     if (pattern.tokenAtIndex(index + 1) === TokenType.CLS_PAREN) {
       
     }
@@ -54,19 +52,24 @@ class App extends Component {
     }
     this.setState({
       tokenIndex: pattern.tokenIndex,
-      instruction: pattern.instrIndex,      
+      instrIndex: pattern.instrIndex,      
     })
   }
 
   nextInstruction() {
     const pattern = this.state.pattern;
-    if(!pattern.nextInstr()) {
+    if(this.state.instrIndex >= pattern.length) {
       this.setState({finished: true});
+      return;
     }
-    pattern.nextStr();
+    let nextInstrIndex = this.state.instrIndex + 1;
+    let nextTokIndex = 0;
+    if (pattern[nextInstrIndex][nextTokIndex].type !== TokenType.STR) {
+      nextTokIndex = PatternLexer.nextStr(pattern[nextInstrIndex], 0);
+    }
     this.setState({
-      tokenIndex: pattern.tokenIndex,
-      instruction: pattern.instrIndex,      
+      instrIndex: nextInstrIndex,  
+      tokenIndex: nextTokIndex,    
     })
   }
 
@@ -75,10 +78,10 @@ class App extends Component {
     if (this.state.pattern !== undefined) {
       display = (
         <div>
-          <InstructionView instruction={this.state.pattern.currentInstruction} index={this.state.tokenIndex}/>
+          <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokenIndex}/>
           <ManualCounter /> 
-          <button onClick={this.step}>Step</button>   
-          <button onClick={this.nextInstruction}>Next</button>
+          <button onClick={this.next}>Next</button>   
+          <button onClick={this.nextInstruction}>Next Instruction</button>
         </div>
       )
     }
