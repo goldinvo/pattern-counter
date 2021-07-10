@@ -12,7 +12,6 @@ function InstructionView(props) {
     } else if (token.type === TokenType.CLS_PAREN) {
       index < props.index ? indicesToStyle.pop() : indicesToStyle.push(index);
     }
-    console.log(indicesToStyle);
   });
 
 
