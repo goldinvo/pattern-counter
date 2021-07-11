@@ -17,17 +17,18 @@ class App extends Component {
       finished: false,
       repeats: [],
     }
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFormChange = this.handleFormChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.next = this.next.bind(this);
     this.nextInstruction = this.nextInstruction.bind(this);
+    this.finishRepeat = this.finishRepeat.bind(this);
   }
   
-  handleChange(e) {
+  handleFormChange(e) {
     this.setState({patternInput: e.target.value});
   }
 
-  handleSubmit(e) {
+  handleFormSubmit(e) {
     e.preventDefault();
     
     const pattern = PatternLexer.tokenize(this.state.patternInput);
@@ -44,44 +45,6 @@ class App extends Component {
     
   }
 
-  // advances to next token using repeat logic. if no next token, call nextInstruction.
-  advance(transState) {
-    let {pattern, instrIndex, tokIndex, repeats, finished} = transState;
-
-    if (pattern[instrIndex][tokIndex].type === TokenType.OPN_PAREN) {
-      repeats.push({index: tokIndex, numRepeats: 0});
-      tokIndex++;
-    } else if (pattern[instrIndex][tokIndex].type === TokenType.CLS_PAREN) {
-      if (needToRepeat(pattern[instrIndex], tokIndex, repeats[repeats.length - 1].numRepeats)){
-        tokIndex = repeats[repeats.length-1].index + 1;
-        repeats[repeats.length - 1].numRepeats++;
-      } else {
-        repeats.pop();
-        tokIndex++;
-      }
-
-    } else {
-      tokIndex++;
-    }
-
-    if (!pattern[instrIndex][tokIndex]) {
-      instrIndex++;
-      tokIndex = 0;
-
-      if(instrIndex >= pattern.length) {
-        finished = true;
-        console.log('finished');
-      }
-    }
-
-    transState.pattern = pattern;
-    transState.instrIndex = instrIndex;
-    transState.tokIndex = tokIndex;
-    transState.repeats = repeats;
-    transState.finished = finished;
-  
-  }
-
   next() {
     let transState = {
       pattern: this.state.pattern,
@@ -90,38 +53,63 @@ class App extends Component {
       repeats: this.state.repeats.slice(),
       finished: this.state.finished,
     }
+
     do {
-     this.advance(transState);
+      advance(transState);
     } while (transState.pattern[transState.instrIndex][transState.tokIndex].type !== TokenType.STR
       && !transState.finished);
+
+    if (transState.finished) {
+      transState.instrIndex = this.state.instrIndex;
+      transState.tokIndex = this.state.tokIndex;
+      transState.repeats = this.state.repeats.slice();
+    }
 
     this.setState({
       ...transState,
     });
   }
 
+  finishRepeat() {
+    // go to next ')' token and pop
+    const instruction = this.state.pattern[this.state.instrIndex];
+    
+    let i = this.state.tokIndex;
+    do {
+      i++
+    } while (instruction[i].type !== TokenType.CLS_PAREN)
+  
+    this.setState({
+      tokIndex: i + 1,
+      repeats: this.state.repeats.slice(0, -1),
+    }, () => {
+      if (instruction[i + 1].type !== TokenType.STR) this.next();
+    })
+
+
+  }
+
   nextInstruction() {
     const pattern = this.state.pattern;
-    if(this.state.instrIndex >= pattern.length) {
+    if(this.state.instrIndex >= pattern.length - 1) {
       this.setState({finished: true});
-      console.log('done')
       return;
     }
     let nextInstrIndex = this.state.instrIndex + 1;
     let nextTokIndex = 0;
     
     this.setState({
-      instrIndex: nextInstrIndex,     
+      instrIndex: nextInstrIndex,
+      tokIndex: nextTokIndex,
+      repeats: [],
     }, () => {
       if (pattern[nextInstrIndex][nextTokIndex].type !== TokenType.STR) {
         this.next();
       }
     })
-    
-    
   }
 
-  repeatChange() {
+  handleRepeatChange() {
     return;
   }
 
@@ -133,6 +121,8 @@ class App extends Component {
           <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats}/>
           <ManualCounter /> 
           <button onClick={this.next}>Next</button>   
+          <button>+1 Repeat</button>
+          <button onClick={this.finishRepeat}>Finish repeat</button>
           <button onClick={this.nextInstruction}>Next Instruction</button>
         </div>
       )
@@ -141,11 +131,13 @@ class App extends Component {
     return (
       <div>
         {display}
-        <PatternForm value={this.state.patternInput} onChange={this.handleChange} onSubmit={this.handleSubmit}/>
+        <PatternForm value={this.state.patternInput} onChange={this.handleFormChange} onSubmit={this.handleFormSubmit}/>
       </div>  
     );
   }
 }
+
+// ====== static methods ======
 
 // 
 function needToRepeat(instruction, index, numRepeats) {
@@ -161,6 +153,46 @@ function needToRepeat(instruction, index, numRepeats) {
 
   return numRepeats < Number(instruction[index + 2].value) - 1;
   
+}
+
+// advances to next token using repeat logic. if no next token, call nextInstruction.
+function advance(transState) {
+  let {pattern, instrIndex, tokIndex, finished} = transState;
+  let repeats = transState.repeats.slice();
+
+  if (pattern[instrIndex][tokIndex].type === TokenType.OPN_PAREN) {
+    repeats.push({index: tokIndex, numRepeats: 0});
+    tokIndex++;
+  } else if (pattern[instrIndex][tokIndex].type === TokenType.CLS_PAREN) {
+    if (needToRepeat(pattern[instrIndex], tokIndex, repeats[repeats.length - 1].numRepeats)){
+      tokIndex = repeats[repeats.length-1].index + 1;
+      repeats[repeats.length - 1].numRepeats++;
+    } else {
+      repeats.pop();
+      tokIndex++;
+    }
+
+  } else {
+    tokIndex++;
+  }
+
+  if (!pattern[instrIndex][tokIndex]) {
+    if(instrIndex >= pattern.length - 1) {
+      tokIndex = transState.tokIndex;
+      repeats = transState.repeats.slice();
+      finished = true;
+    } else {
+      instrIndex++;
+      tokIndex = 0;
+    }
+  }
+
+  transState.pattern = pattern;
+  transState.instrIndex = instrIndex;
+  transState.tokIndex = tokIndex;
+  transState.repeats = repeats;
+  transState.finished = finished;
+
 }
 
 export default App;
