@@ -80,14 +80,14 @@ class App extends Component {
 
       do { 
         transNext(transState);
-      } while (transState.repeats[repeatIndex] && numRepeats === transState.repeats[repeatIndex].numRepeats)
-      
+      } while (!transState.finished && transState.repeats[repeatIndex] && numRepeats === transState.repeats[repeatIndex].numRepeats)
+
       return {...transState};
     });
   }
 
   finishRepeat() {
-    // go to next ')' token and pop
+    // go ahead of next ')' token and pop repeats
     const instruction = this.state.pattern[this.state.instrIndex];
     
     let i = this.state.tokIndex;
@@ -97,7 +97,7 @@ class App extends Component {
   
     this.setState({
       tokIndex: i + 1,
-      repeats: this.state.repeats.slice(0, -1),
+      repeats: JSON.parse(JSON.stringify(this.state.repeats.slice(0, -1))),
     }, () => {
       if (instruction[i + 1].type !== TokenType.STR) this.next();
     })
@@ -135,8 +135,8 @@ class App extends Component {
           <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats}/>
           <ManualCounter /> 
           <button onClick={this.next}>Next</button>   
-          <button onClick={this.addRepeat}>+1 Repeat</button>
-          <button onClick={this.finishRepeat}>Finish repeat</button>
+          <button onClick={this.addRepeat}>Complete Repeat</button>
+          <button onClick={this.finishRepeat}>Exit repeat</button>
           <button onClick={this.nextInstruction}>Next Instruction</button>
         </div>
       )
