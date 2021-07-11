@@ -22,6 +22,7 @@ class App extends Component {
     this.next = this.next.bind(this);
     this.nextInstruction = this.nextInstruction.bind(this);
     this.finishRepeat = this.finishRepeat.bind(this);
+    this.addRepeat = this.addRepeat.bind(this);
   }
   
   handleFormChange(e) {
@@ -46,27 +47,42 @@ class App extends Component {
   }
 
   next() {
-    let transState = {
-      pattern: this.state.pattern,
-      instrIndex: this.state.instrIndex,
-      tokIndex: this.state.tokIndex,
-      repeats: this.state.repeats.slice(),
-      finished: this.state.finished,
-    }
+    this.setState( prevState => {
 
-    do {
-      advance(transState);
-    } while (transState.pattern[transState.instrIndex][transState.tokIndex].type !== TokenType.STR
-      && !transState.finished);
+      let transState = {
+        pattern: prevState.pattern,
+        instrIndex: prevState.instrIndex,
+        tokIndex: prevState.tokIndex,
+        repeats: JSON.parse(JSON.stringify(prevState.repeats)),
+        finished: prevState.finished,
+      }
+      
+      transNext(transState);
 
-    if (transState.finished) {
-      transState.instrIndex = this.state.instrIndex;
-      transState.tokIndex = this.state.tokIndex;
-      transState.repeats = this.state.repeats.slice();
-    }
+      return {...transState};
+    });
+  }
 
-    this.setState({
-      ...transState,
+  addRepeat() {
+    // go 'next()' until repeat status in state changes
+    this.setState( prevState => {
+
+      let transState = {
+        pattern: prevState.pattern,
+        instrIndex: prevState.instrIndex,
+        tokIndex: prevState.tokIndex,
+        repeats: JSON.parse(JSON.stringify(prevState.repeats)),
+        finished: prevState.finished,
+      }
+      
+      const repeatIndex = transState.repeats.length - 1;
+      const numRepeats = transState.repeats[repeatIndex].numRepeats;
+
+      do { 
+        transNext(transState);
+      } while (transState.repeats[repeatIndex] && numRepeats === transState.repeats[repeatIndex].numRepeats)
+      
+      return {...transState};
     });
   }
 
@@ -77,7 +93,7 @@ class App extends Component {
     let i = this.state.tokIndex;
     do {
       i++
-    } while (instruction[i].type !== TokenType.CLS_PAREN)
+    } while (instruction[i].type !== TokenType.CLS_PAREN);
   
     this.setState({
       tokIndex: i + 1,
@@ -85,8 +101,6 @@ class App extends Component {
     }, () => {
       if (instruction[i + 1].type !== TokenType.STR) this.next();
     })
-
-
   }
 
   nextInstruction() {
@@ -121,7 +135,7 @@ class App extends Component {
           <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats}/>
           <ManualCounter /> 
           <button onClick={this.next}>Next</button>   
-          <button>+1 Repeat</button>
+          <button onClick={this.addRepeat}>+1 Repeat</button>
           <button onClick={this.finishRepeat}>Finish repeat</button>
           <button onClick={this.nextInstruction}>Next Instruction</button>
         </div>
@@ -194,5 +208,22 @@ function advance(transState) {
   transState.finished = finished;
 
 }
+
+function transNext(transState) {
+  const initInstr = transState.instrIndex;
+  const initTok = transState.tokIndex;
+  const initReps = JSON.parse(JSON.stringify(transState.repeats));
+  
+  do {
+    advance(transState);
+  } while (transState.pattern[transState.instrIndex][transState.tokIndex].type !== TokenType.STR
+    && !transState.finished);
+
+  if (transState.finished) {
+    transState.instrIndex = initInstr;
+    transState.tokIndex = initTok;
+    transState.repeats = initReps;
+  }
+} 
 
 export default App;
