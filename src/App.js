@@ -33,6 +33,10 @@ class App extends Component {
     const pattern = PatternLexer.tokenize(this.state.patternInput);
     this.setState({
       pattern: pattern,
+      instrIndex: 0,
+      tokIndex: 0,
+      finished: false,
+      repeats: [],
     }, () => {
       if (pattern[0][0].type !== TokenType.STR) this.next();
     }); 
@@ -51,7 +55,6 @@ class App extends Component {
       if (needToRepeat(pattern[instrIndex], tokIndex, repeats[repeats.length - 1].numRepeats)){
         tokIndex = repeats[repeats.length-1].index + 1;
         repeats[repeats.length - 1].numRepeats++;
-        console.log(repeats[repeats.length -1].numRepeats)
       } else {
         repeats.pop();
         tokIndex++;
@@ -118,12 +121,16 @@ class App extends Component {
     
   }
 
+  repeatChange() {
+    return;
+  }
+
   render() {
     let display = null;
     if (this.state.pattern !== undefined) {
       display = (
         <div>
-          <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex}/>
+          <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats}/>
           <ManualCounter /> 
           <button onClick={this.next}>Next</button>   
           <button onClick={this.nextInstruction}>Next Instruction</button>
@@ -152,7 +159,7 @@ function needToRepeat(instruction, index, numRepeats) {
   // we have a ()xNUM
   if (instruction[index + 2].type !== TokenType.NUM) console.log("asldkfjldkjlk");
 
-  return numRepeats < Number(instruction[index + 2].value);
+  return numRepeats < Number(instruction[index + 2].value) - 1;
   
 }
 

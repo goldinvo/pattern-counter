@@ -1,48 +1,26 @@
-import {TokenType} from '../Token'
-import './InstructionView.css';
+import InstructionText from './InstructionText'
+import Counter from './Counter'
+import './InstructionText.css';
 
 const COLORS = ['red', 'orange', 'yellow'];
 
-// properties: instruction, index
-function InstructionView(props) {
-  let indicesToStyle = [];
-  props.instruction.forEach((token, index) => {
-    if (token.type === TokenType.OPN_PAREN && index < props.index) {
-      indicesToStyle.push(index);
-    } else if (token.type === TokenType.CLS_PAREN) {
-      index < props.index ? indicesToStyle.pop() : indicesToStyle.push(index);
-    }
+// properties: instruction, index, repeats
+function InstructionView(props) { 
+  let repeatCounters = props.repeats.map( (repeatElement, index) => {
+    let style = index < COLORS.length ? COLORS[index] : COLORS[COLORS.length - 1];
+    return (
+      <div className={style}>
+        <Counter key={index} name={`Repeat Counter ${index + 1}`} value={repeatElement.numRepeats}/>
+      </div>
+    );
   });
-
-
-  let colorIndex = 0;    
-  let clsParenColorStack = [];
-  let output = props.instruction.map( (token, index) => {
-    
-    const currentInstr = index === props.index;
-    const coloredParen = indicesToStyle.includes(index);
-    let classes = currentInstr ? 'focused ' : '';
-    if (coloredParen) {
-      if (token.type === TokenType.OPN_PAREN) {
-        classes += COLORS[colorIndex];
-        clsParenColorStack.push(COLORS[colorIndex]);
-        
-        if ((colorIndex + 1) < COLORS.length) colorIndex++;
-      } else {
-        // closed paren
-        classes += clsParenColorStack.pop();
-      }
-      
-    }
-
-    return <span className={classes} key={index}>{token.value + " "}</span>;
-  }) 
   
   return (
     <div>
-      {output}
+      <InstructionText instruction={props.instruction} index={props.index} colors={COLORS}/>
+      {repeatCounters}
     </div>
   );
-}
+} 
 
-export default InstructionView
+export default InstructionView;
