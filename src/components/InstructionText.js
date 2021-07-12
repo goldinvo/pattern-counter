@@ -1,5 +1,5 @@
 import {TokenType} from '../Token'
-import './InstructionText.css';
+
 
 // properties: instruction, index, colors
 function InstructionText(props) {
@@ -19,7 +19,7 @@ function InstructionText(props) {
     
     const currentInstr = index === props.index;
     const coloredParen = indicesToStyle.includes(index);
-    let classes = currentInstr ? 'focused ' : '';
+    let classes = currentInstr ? 'focusedText ' : '';
     if (coloredParen) {
       if (token.type === TokenType.OPN_PAREN) {
         classes += props.colors[colorIndex];
@@ -37,7 +37,7 @@ function InstructionText(props) {
   }) 
   
   return (
-    <div>
+    <div className='instructionText'>
       {output}
     </div>
   );

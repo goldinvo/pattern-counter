@@ -1,0 +1,23 @@
+.counter {
+  margin: 5px;
+  padding: 20px 10px;
+  border-radius: 5px;
+
+}
+
+.counter label {
+  display: block;
+  text-align: center;
+}
+
+.counter.red {
+  background-color: rgb(255, 104, 104);
+}
+
+.counter.orange {
+  background-color: orange;
+}
+
+.counter.yellow {
+  background-color: yellow;
+}

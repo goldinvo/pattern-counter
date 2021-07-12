@@ -1,0 +1,37 @@
+.instructionView {
+  
+}
+
+.instructionText {
+  background-color: #f8f8f8;
+  font-size: 32px;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  color: #666666;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.instructionText .focusedText {
+  color: black;
+  font-weight: bold;
+}
+
+.countersContainer {
+  display: flex;
+  flex-flow: row-reverse wrap;
+  justify-content: flex-end;
+}
+
+.instructionText .red {
+  color: red;
+}
+
+.instructionText .orange {
+  color: orange;
+}
+
+.instructionText .yellow {
+  color: yellowgreen;
+}

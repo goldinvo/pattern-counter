@@ -1,0 +1,10 @@
+.manual-counter{
+  background-color: gainsboro;
+  border-radius: 5px;
+  padding-bottom: 10px;
+}
+
+.manual-counter #controls {
+  display: flex;
+  justify-content: center;
+}

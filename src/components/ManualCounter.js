@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import Counter from "./Counter"
 
+import './ManualCounter.css'
+
 const maxCount = 999;
 
-// props:
+// props: 
 // state: count is always a string that is either empty or represents a 3 digit whole number
 class ManualCounter extends Component {
   constructor(props) {
@@ -44,11 +46,14 @@ class ManualCounter extends Component {
 
   render() {
     return (
-      <div>
+      <div className='manual-counter'>
         <Counter name="Manual Counter" onChange={this.handleChange} value={this.state.count} />
-        <button type='button' onClick={() => this.increment(1)}>+1</button>
-        <button type='button' onClick={() => this.increment(10)}>+10</button>
-        <button type='button' onClick={this.reset}>Reset</button>
+        <div id='controls'>
+          <button type='button' onClick={() => this.increment(1)}>+1</button>
+          <button type='button' onClick={() => this.increment(10)}>+10</button>
+          <button type='button' onClick={this.reset}>Reset</button>
+        </div>
+        
       </div>
     );
   }

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import ManualCounter from "./components/ManualCounter";
 import PatternForm from "./components/PatternForm";
 import InstructionView from "./components/InstructionView";
 import PatternLexer from "./PatternLexer";
 import {TokenType} from './Token'
+
+import './App.css';
 
 
 class App extends Component {
@@ -132,8 +133,9 @@ class App extends Component {
     if (this.state.pattern !== undefined) {
       display = (
         <div>
-          <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats}/>
-          <ManualCounter /> 
+          <div className='visualContent'>
+            <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats}/>
+          </div>  
           <button onClick={this.next}>Next</button>   
           <button onClick={this.addRepeat}>Complete Repeat</button>
           <button onClick={this.finishRepeat}>Exit repeat</button>

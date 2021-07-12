@@ -1,24 +1,30 @@
 import InstructionText from './InstructionText'
 import Counter from './Counter'
-import './InstructionText.css';
+import ManualCounter from './ManualCounter';
+
+import './InstructionView.css';
 
 const COLORS = ['red', 'orange', 'yellow'];
 
 // properties: instruction, index, repeats
 function InstructionView(props) { 
   let repeatCounters = props.repeats.map( (repeatElement, index) => {
-    let style = index < COLORS.length ? COLORS[index] : COLORS[COLORS.length - 1];
+    let color = index < COLORS.length ? COLORS[index] : COLORS[COLORS.length - 1];
     return (
-      <div className={style} key={index}>
-        <Counter name={`Repeat Counter ${index + 1}`} value={repeatElement.numRepeats}/>
+      <div key={index}>
+        <Counter color={color} name={`Repeat Counter ${index + 1}`} value={repeatElement.numRepeats}/>
       </div>
     );
   });
    
   return (
-    <div>
-      <InstructionText instruction={props.instruction} index={props.index} colors={COLORS}/>
-      {repeatCounters}
+    <div className='instructionView'>
+      <div><InstructionText instruction={props.instruction} index={props.index} colors={COLORS}/></div>
+      <div className='countersContainer'>
+        {repeatCounters}
+        <ManualCounter />
+      </div>
+      
     </div>
   );
 } 

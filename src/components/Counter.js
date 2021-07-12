@@ -1,7 +1,9 @@
-// props: name, onChange, value
+import './Counter.css'
+
+// props: name, onChange, value, color
 function Counter(props) {
   return (
-    <div>
+    <div className={'counter ' + props.color}>
       <form>
         <label htmlFor="counterInput">{props.name}</label>
         <input 
