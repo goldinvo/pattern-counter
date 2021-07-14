@@ -1,0 +1,24 @@
+html, body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #fefefe;
+  font-size: 20px;
+}
+
+button, input[type='submit'] {
+  font-size: inherit;
+  background-color: #ccfdfa;
+  border: 2px solid #b0dfdb;
+  border-radius: 15px;
+  padding: 10px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+button:hover, input[type='submit']:hover {
+  border-color: #88aaa7
+}
+
+button:active, input[type='submit']:active {
+  background-color: #a7dfdb
+}
+

@@ -1,0 +1,12 @@
+.PatternForm {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: flex-start;
+}
+
+.PatternForm textarea{
+  resize: none;
+  width: 90%;
+  min-height: 400px;
+  font-size: 17px;
+}

@@ -11,9 +11,7 @@ function InstructionView(props) {
   let repeatCounters = props.repeats.map( (repeatElement, index) => {
     let color = index < COLORS.length ? COLORS[index] : COLORS[COLORS.length - 1];
     return (
-      <div key={index}>
-        <Counter color={color} name={`Repeat Counter ${index + 1}`} value={repeatElement.numRepeats}/>
-      </div>
+        <Counter key={index} color={color} name={`Repeat Counter ${index + 1}`} value={repeatElement.numRepeats}/>
     );
   });
    

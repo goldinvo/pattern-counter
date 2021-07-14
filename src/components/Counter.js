@@ -1,6 +1,6 @@
 import './Counter.css'
 
-// props: name, onChange, value, color
+// props: name, onChange, value, color, controls(optional)
 function Counter(props) {
   return (
     <div className={'counter ' + props.color}>
@@ -14,6 +14,7 @@ function Counter(props) {
           onChange={props.onChange}
         />
       </form>
+      {props.controls ? props.controls : null}
     </div>
   );
 }

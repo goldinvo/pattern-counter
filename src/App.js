@@ -136,10 +136,12 @@ class App extends Component {
           <div className='visualContent'>
             <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats}/>
           </div>  
-          <button onClick={this.next}>Next</button>   
-          <button onClick={this.addRepeat}>Complete Repeat</button>
-          <button onClick={this.finishRepeat}>Exit repeat</button>
-          <button onClick={this.nextInstruction}>Next Instruction</button>
+          <div className='button-menu'>
+            <button onClick={this.next}>Next</button>   
+            <button onClick={this.addRepeat}>Complete Repeat</button>
+            <button onClick={this.finishRepeat}>Exit repeat</button>
+            <button onClick={this.nextInstruction}>Next Instruction</button>
+          </div>
         </div>
       )
     }

@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import Counter from "./Counter"
 
-import './ManualCounter.css'
-
 const maxCount = 999;
 
 // props: 
@@ -45,15 +43,17 @@ class ManualCounter extends Component {
   }
 
   render() {
+    const controls = (
+      <div id='controls' style={{display: 'flex', justifyContent: 'center'}}>
+        <button type='button' onClick={() => this.increment(1)}>+1</button>
+        <button type='button' onClick={() => this.increment(10)}>+10</button>
+        <button type='button' onClick={this.reset}>Reset</button>
+      </div>
+    )
+    
     return (
       <div className='manual-counter'>
-        <Counter name="Manual Counter" onChange={this.handleChange} value={this.state.count} />
-        <div id='controls'>
-          <button type='button' onClick={() => this.increment(1)}>+1</button>
-          <button type='button' onClick={() => this.increment(10)}>+10</button>
-          <button type='button' onClick={this.reset}>Reset</button>
-        </div>
-        
+        <Counter name="Manual Counter" onChange={this.handleChange} value={this.state.count} controls={controls}/>
       </div>
     );
   }

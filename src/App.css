@@ -1,6 +1,9 @@
-html, body {
-  font-family: 'Roboto', sans-serif;
+.button-menu {
+  display: flex;
+  justify-content: center;
 }
 
-.visualContent {
+.button-menu button{
+  height: 80px;
+  min-width: 170px;
 }

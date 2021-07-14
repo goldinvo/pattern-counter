@@ -6,11 +6,10 @@
   background-color: #f8f8f8;
   font-size: 32px;
   padding: 10px;
-  border: 2px solid black;
-  border-radius: 5px;
+  border: 1px solid gray;
+  border-radius: 15px;
   color: #666666;
   text-align: center;
-  margin-bottom: 15px;
 }
 
 .instructionText .focusedText {
@@ -21,7 +20,7 @@
 .countersContainer {
   display: flex;
   flex-flow: row-reverse wrap;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .instructionText .red {

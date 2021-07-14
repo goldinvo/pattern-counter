@@ -1,23 +1,49 @@
 .counter {
-  margin: 5px;
+  border: 2px solid darkgray;
+  border-radius: 15px;
   padding: 20px 10px;
-  border-radius: 5px;
-
+  background-color: gainsboro; /* fallback value */
 }
 
-.counter label {
-  display: block;
+.counter form {
+  border-color: inherit;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.counter input {
+  padding: 10px;
+  box-sizing: border-box;
+  border: solid;
+  border-width: 2px;
+  border-radius: 15px;
+  border-color: inherit;
+
   text-align: center;
+  font-size: 40px;
+  width: 120px;
+}
+
+.counter input:focus {
+  outline: none;
+}
+
+.counter input:hover {
+  border-color: rgb(71, 71, 71);
 }
 
 .counter.red {
-  background-color: rgb(255, 104, 104);
+  background-color: lightcoral;
+  border-color: maroon;
 }
 
 .counter.orange {
   background-color: orange;
+  background-color: darkorange;
 }
 
 .counter.yellow {
   background-color: yellow;
+  background-color: burlywood;
 }
