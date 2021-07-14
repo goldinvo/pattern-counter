@@ -3,6 +3,8 @@
   border-radius: 15px;
   padding: 20px 10px;
   background-color: gainsboro; /* fallback value */
+
+  margin-right: 10px;
 }
 
 .counter form {
@@ -40,10 +42,10 @@
 
 .counter.orange {
   background-color: orange;
-  background-color: darkorange;
+  border-color: darkorange;
 }
 
 .counter.yellow {
   background-color: yellow;
-  background-color: burlywood;
+  border-color: burlywood;
 }

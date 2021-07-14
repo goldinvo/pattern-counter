@@ -150,10 +150,11 @@ class App extends Component {
             <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats} onRepeatChange={this.handleRepeatChange}/>
           </div>  
           <div className='button-menu'>
-            <button onClick={this.next}>Next</button>   
+            <button onClick={this.next}>Next</button>
+            <button onClick={this.nextInstruction}>Next Instruction</button>  
             {this.state.repeats.length > 0 ? <button onClick={this.addRepeat}>Complete Repeat</button> : null}
             {this.state.repeats.length > 0 ? <button onClick={this.finishRepeat}>Exit repeat</button> : null}
-            <button onClick={this.nextInstruction}>Next Instruction</button>
+            
           </div>
         </div>
       )

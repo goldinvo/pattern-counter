@@ -1,9 +1,11 @@
 .button-menu {
   display: flex;
-  justify-content: center;
+  margin: 20px 10px;
+
 }
 
 .button-menu button{
   height: 80px;
   min-width: 170px;
+  margin-right: 10px;
 }
