@@ -24,12 +24,11 @@ The pattern submitted by the user should follow the proper syntax for the app to
 The pattern input by the user should be a sequence of instructions separated by one or more line breaks. Instructions are displayed one at a time, and are composed of the instruction number, comments, sequences of strings, and parenthesis/numbers/multipliers used to denote repeats. 
 
 For example:    
-    26. CTC, INC 10, CTB, INC * 20 (60)↵
-    27. CTC, (SC 9, INC) * 2, CTB, (SC 9, INC) * 4  (66)↵
-    ↵
-    28. (CTC, SC 23, CTB, SC 43) * 2 (66)↵
-    39. (CTC, SC 24, CTB, SC 42) * 2 (66)
-
+    26. CTC, INC 10, CTB, INC * 20 (60)↵    
+    27. CTC, (SC 9, INC) * 2, CTB, (SC 9, INC) * 4  (66)↵    
+    ↵    
+    28. (CTC, SC 23, CTB, SC 43) * 2 (66)↵    
+    39. (CTC, SC 24, CTB, SC 42) * 2 (66)    
 
 Instruction Numbers and Information/Comments are ignored by the application, but are kept in to be displayed as useful information for the user.    
 Instruction numbers are optional, and may appear only at the beginning of an instruction if used. 
@@ -37,7 +36,7 @@ Instruction numbers are optional, and may appear only at the beginning of an ins
 Strings (which act as a single step when working in a pattern are separated by separators, typically commas, or other tokens. They may consist of numbers but they cannot be only a number.    
 - A single string is not wrapped in parenthesis. `(things like this)` are interpreted as a comment.
 - A sequence of strings wrapped in parenthesis `(like, this, one)` are interpreted as a repeat sequence.
-  - if by a multiplier and then by a number `(like, this) * 3`, the sequence will be repeated 3 times as the user steps through them
+  - if followed by a multiplier and then by a number `(like, this) * 3`, the sequence will be repeated 3 times as the user steps through them
   - if not followed by both a multiplier and a number, the sequence will repeat indefinitely until the user clicks the "exit repeat" button. This is to account for conditional repeats, such as "until you reach the end of the row" while still being able to keep track of the number of repeats you have made.
 
 ## Application Structure
@@ -51,7 +50,7 @@ Notable files:
 - Other:
   - `PatternLexer.js`: A module of functions for tokenization of user input and light validation of syntax.
   - `Token.js`: Interface for using token objects that compose a pattern.
-  
+
 ---
 
 # Getting Started with Create React App
