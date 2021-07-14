@@ -6,12 +6,19 @@ import './InstructionView.css';
 
 const COLORS = ['red', 'orange', 'yellow'];
 
-// properties: instruction, index, repeats
-function InstructionView(props) { 
+// properties: instruction, index, repeats, onRepeatChange
+function InstructionView(props) {
   let repeatCounters = props.repeats.map( (repeatElement, index) => {
     let color = index < COLORS.length ? COLORS[index] : COLORS[COLORS.length - 1];
     return (
-        <Counter key={index} color={color} name={`Repeat Counter ${index + 1}`} value={repeatElement.numRepeats}/>
+        <Counter key={index} 
+        color={color} 
+        name={`Repeat Counter ${index + 1}`} 
+        value={repeatElement.numRepeats} 
+        onChange={(event) => {
+          props.onRepeatChange(index, event);
+        }}
+        />
     );
   });
    

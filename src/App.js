@@ -24,6 +24,7 @@ class App extends Component {
     this.nextInstruction = this.nextInstruction.bind(this);
     this.finishRepeat = this.finishRepeat.bind(this);
     this.addRepeat = this.addRepeat.bind(this);
+    this.handleRepeatChange = this.handleRepeatChange.bind(this);
   }
   
   handleFormChange(e) {
@@ -124,7 +125,19 @@ class App extends Component {
     })
   }
 
-  handleRepeatChange() {
+  handleRepeatChange(index, event) {
+    let newVal = event.target.value;
+    if (newVal.match(/\D/)) {
+      // Don't accept non-numeric chars
+      return;
+    }   
+    newVal = parseInt(newVal); // NaN if empty string
+
+    let newRepeats = JSON.parse(JSON.stringify(this.state.repeats));
+    newRepeats[index].numRepeats = newVal ? newVal : 0;
+    this.setState({
+      repeats: newRepeats,
+    })
     return;
   }
 
@@ -134,7 +147,7 @@ class App extends Component {
       display = (
         <div>
           <div className='visualContent'>
-            <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats}/>
+            <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats} onRepeatChange={this.handleRepeatChange}/>
           </div>  
           <div className='button-menu'>
             <button onClick={this.next}>Next</button>   

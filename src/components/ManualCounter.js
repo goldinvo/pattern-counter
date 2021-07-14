@@ -20,7 +20,6 @@ class ManualCounter extends Component {
     let newCount = e.target.value;
     if (newCount.match(/\D/)) {
       // Don't accept non-numeric chars
-      console.log('jo');
       return;
     }    
     newCount = parseInt(newCount); // NaN if empty string
