@@ -1,11 +1,15 @@
 import {TokenType} from '../Token'
 
 // The text view for the current line of instruction. Displays in bold the step of the instruction 
-// you are currently on (according to tokIndex), and highlights parenthesis pairs in individual colors
+// you are currently on (according to tokIndex), and highlights different parenthesis pairs in different colors
 //
 // properties: instruction, tokIndex, colors (an array of the sequence of colors)
 function InstructionText(props) {
 
+  // Get list of the indices of the parentheses we need to color
+  //
+  // Go left to right adding to stack if valid. Keep rejectNextClsParen to remember to reject corresponding
+  // closing parenthesis from rejected open parenthesis.
   let indicesToStyle = [];
   let rejectNextClsParen = 0;
   props.instruction.forEach((token, index) => {
@@ -23,20 +27,23 @@ function InstructionText(props) {
 
   });
 
+  // crete output as sequence of token values surrounded by styled spans
+  let colorIndex = 0; // index of color in input color array
+  let clsParenColorStack = []; // to match with corresponding open paren colors
 
-  
-  let colorIndex = 0;    
-  let clsParenColorStack = [];
   let output = props.instruction.map( (token, index) => {
-    const currentInstr = index === props.tokIndex;
-    const coloredParen = indicesToStyle.includes(index);
+
+    const currentInstr = index === props.tokIndex; // bold this
+    const coloredParen = indicesToStyle.includes(index); // color this
+
     let classes = currentInstr ? 'focusedText ' : '';
+
     if (coloredParen) {
       if (token.type === TokenType.OPN_PAREN) {
         classes += props.colors[colorIndex];
         clsParenColorStack.push(props.colors[colorIndex]);
         
-        if ((colorIndex + 1) < props.colors.length) colorIndex++;
+        if ((colorIndex + 1) < props.colors.length) colorIndex++; // if we used up all of the colors already, just stay at last color
       } else {
         // closed paren
         classes += clsParenColorStack.pop();

@@ -3,11 +3,12 @@ import Counter from "./Counter"
 
 const maxCount = 999;
 
-// props: 
+// an independent simple counter component with button controls for if the user wants to manually count something
+//
 // state: count is always a string that is either empty or represents a 3 digit whole number
 class ManualCounter extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       count: '0',
     }
@@ -25,8 +26,9 @@ class ManualCounter extends Component {
     document.removeEventListener("keydown", this.onKeyPressed);
   }
 
+  // for keyboard shortcuts
   onKeyPressed(e) {
-    if (e.target.tagName === 'TEXTAREA') return;
+    if (e.target.tagName === 'TEXTAREA') return; // avoid accidental presses when inputting pattern
     
     switch(e.key) {
       case "z":

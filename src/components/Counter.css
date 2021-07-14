@@ -1,38 +1,10 @@
 .counter {
+  background-color: gainsboro;
   border: 2px solid darkgray;
-  border-radius: 15px;
-  padding: 20px 10px;
-  background-color: gainsboro; /* fallback value */
+  border-radius: 15px;  
 
   margin-right: 10px;
-}
-
-.counter form {
-  border-color: inherit;
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-}
-
-.counter input {
-  padding: 10px;
-  box-sizing: border-box;
-  border: solid;
-  border-width: 2px;
-  border-radius: 15px;
-  border-color: inherit;
-
-  text-align: center;
-  font-size: 40px;
-  width: 120px;
-}
-
-.counter input:focus {
-  outline: none;
-}
-
-.counter input:hover {
-  border-color: rgb(71, 71, 71);
+  padding: 20px 10px;
 }
 
 .counter.red {
@@ -49,3 +21,35 @@
   background-color: yellowgreen;
   border-color: green;
 }
+
+.counter form {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  
+  border: none;
+  border-color: inherit;
+}
+
+.counter input {
+  text-align: center;
+  font-size: 40px;
+
+  border: solid;
+  border-width: 2px;
+  border-color: inherit;
+  border-radius: 15px;
+
+  box-sizing: border-box;
+  padding: 10px;
+  width: 120px;
+}
+
+.counter input:focus {
+  outline: none;
+}
+
+.counter input:hover {
+  border-color: rgb(71, 71, 71);
+}
+

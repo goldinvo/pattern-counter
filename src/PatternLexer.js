@@ -1,5 +1,6 @@
 import {TokenType, mapToToken, tokenFactory} from './Token'
 
+// A module for tokenization of user input and light validation of syntax.
 const PatternLexer = (function() {
 
   // create an array of token arrays that represent an individual instruction
@@ -18,7 +19,7 @@ const PatternLexer = (function() {
       .map(tokenString => {
         return tokenString
           .trim()   
-          .split(/([(){}[\].,*])/) // separate all non-literal tokens (literals always surrounded by separators)
+          .split(/([(){}[\].,*])/) // separate all non-literal tokens (literals always surrounded by tokens/separators)
           .map(token => token.trim())     // get rid of all whitespace
           .filter(token => token !== "");
       });
@@ -61,6 +62,8 @@ const PatternLexer = (function() {
     return parensMatch ? false : PTN_ERR.PAREN_MATCH;
   }
 
+  // takes an array of strings and maps it to its corresponding tokens.
+  // Not necessarily one-to-one: ex. '5', '.' => '5.' (instruction token)
   function _stringsToTokens(tokenString) {
     let tokenArr = [];
     let index = 0; 
@@ -105,75 +108,5 @@ const PatternLexer = (function() {
   }
 
 })();
-
-
-// lexing interface for a given pattern string to be used by parser
-// ex) `                            [
-//     5. (SC 3, INC) x 6 (30)        ["5.", "(", "SC 3", ",", "INC", ")", "x", "6", "(30)"],  (instruction 0)
-//     6. (SC 4, INC) x 6 (36)  ==>   ["6.", "(", "SC 4", ",", "INC", ")", "x", "6", "(36)"],  (instruction 1)
-//     7. (SC 5, INC) x 6 (42)        ["7.", "(", "SC 5", ",", "INC", ")", "x", "6", "(42)"]   (instruction 2)
-//     `                            ]
-//
-// currentToken: starts at first token of first instruction
-// advance(): advance to next token within an instruction. returns false iff cannot advance (end of instr);
-// nextInstr(): currentToken is now the first token of the next instruction. returns false iff no next instruction.
-// class PatternLexer {  
-//   constructor(pattern) {
-//     this._tokens = tokenize(pattern);
-//     this._instrIndex = 0;
-//     this._tokenIndex = 0;
-//   }
-
-//   get currentToken() {
-//     return this._tokens[this._instrIndex][this._tokenIndex];
-//   }
-
-//   get currentInstruction() {
-//     return this._tokens[this._instrIndex].slice();
-//   }
-
-//   get instrIndex() {
-//     return this._instrIndex;
-//   }
-
-//   get tokenIndex() {
-//     return this._tokenIndex;
-//   }
-
-//   setPosition(instrIndex, tokenIndex) {
-//     if (this._tokens[instrIndex] === undefined || this._tokens[instrIndex][tokenIndex] === undefined) {
-//       return false;
-//     }
-//     this._instrIndex = instrIndex;
-//     this._tokenIndex = tokenIndex;
-//     return true;
-//   }
-
-//   advance() {
-//     return this.setPosition(this._instrIndex, this._tokenIndex + 1)
-//   }
-
-//   nextInstr() {
-//     return this.setPosition(this._instrIndex + 1, 0);
-//   }
-
-//   tokenAtIndex(i) {
-//     return this._tokens[this._instrIndex][this._tokenIndex + 1]
-//   }
-
-//   nextStr() {
-//     do {
-//       if (!this.advance()) return false;
-//     } while (this.currentToken.type !== TokenType.STR);
-//     return true;
-//   }
-
-
-
-// }
-
-
-
-
 
 export default PatternLexer;

@@ -1,6 +1,7 @@
 import './Counter.css'
 
-// props: name, onChange, value, color, controls(optional)
+// Display for counts that can be changed by the user
+// props: name, onChange, value, color, controls (optional, for if you want buttons to interact with counter directly in component)
 function Counter(props) {
   return (
     <div className={'counter ' + props.color}>

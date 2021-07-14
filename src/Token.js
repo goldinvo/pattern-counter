@@ -24,4 +24,5 @@ function mapToToken(str) {
 const tokenFactory = (type, value) => {
   return {type, value};
 }
+
 export {TokenType, mapToToken, tokenFactory};
