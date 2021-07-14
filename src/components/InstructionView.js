@@ -6,7 +6,7 @@ import './InstructionView.css';
 
 const COLORS = ['red', 'orange', 'yellow'];
 
-// properties: instruction, index, repeats, onRepeatChange
+// properties: instruction, tokIndex, repeats, onRepeatChange
 function InstructionView(props) {
   let repeatCounters = props.repeats.map( (repeatElement, index) => {
     let color = index < COLORS.length ? COLORS[index] : COLORS[COLORS.length - 1];
@@ -24,7 +24,7 @@ function InstructionView(props) {
    
   return (
     <div className='instructionView'>
-      <div><InstructionText instruction={props.instruction} index={props.index} colors={COLORS}/></div>
+      <div><InstructionText instruction={props.instruction} tokIndex={props.tokIndex} colors={COLORS}/></div>
       <div className='countersContainer'>
         {repeatCounters}
         <ManualCounter />

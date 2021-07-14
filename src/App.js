@@ -182,7 +182,7 @@ class App extends Component {
       display = (
         <div>
           <div className='visualContent'>
-            <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats} onRepeatChange={this.handleRepeatChange}/>
+            <InstructionView instruction={this.state.pattern[this.state.instrIndex]} tokIndex={this.state.tokIndex} repeats={this.state.repeats} onRepeatChange={this.handleRepeatChange}/>
           </div>  
           <div className='button-menu'>
             <button onClick={this.next}>Next (Space)</button>
