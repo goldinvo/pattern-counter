@@ -1,3 +1,59 @@
+
+# Pattern Counter
+
+An interactive tool for knitters and crocheters that parses/decomposes patterns and keeps track of repeat counts so that it is easier for the user to keep track of their place in a pattern. 
+
+## Syntax
+
+The pattern submitted by the user should follow the proper syntax for the app to function as expected. This syntax is based on how patterns are typically written. Since patterns are not written in a standardized way, syntax rules must be minimal and flexible so that the user has to modify their pattern as little as possible to use the pattern counter.
+
+### Tokens / Delimiters
+
+- Instruction Number: `5)`,  `6.`
+- Information/Comments: `(30)`, `(You should have 3 stitches on the needle)`, `()`
+- Number: `1`, `2`
+- String: `sc 3`, `m1r`, `make a magic loop`
+- Open Parenthesis: `(`, `{`, `[`
+- Closed Parenthesis: `)` `}`, `]`
+- Multipliers: `*`
+- Seperators: `.`, `,`
+- Line Breaks: `↵`
+
+### Usage
+
+The pattern input by the user should be a sequence of instructions separated by one or more line breaks. Instructions are displayed one at a time, and are composed of the instruction number, comments, sequences of strings, and parenthesis/numbers/multipliers used to denote repeats. 
+
+For example:    
+    26. CTC, INC 10, CTB, INC * 20 (60)↵
+    27. CTC, (SC 9, INC) * 2, CTB, (SC 9, INC) * 4  (66)↵
+    ↵
+    28. (CTC, SC 23, CTB, SC 43) * 2 (66)↵
+    39. (CTC, SC 24, CTB, SC 42) * 2 (66)
+
+
+Instruction Numbers and Information/Comments are ignored by the application, but are kept in to be displayed as useful information for the user.    
+Instruction numbers are optional, and may appear only at the beginning of an instruction if used. 
+
+Strings (which act as a single step when working in a pattern are separated by separators, typically commas, or other tokens. They may consist of numbers but they cannot be only a number.    
+- A single string is not wrapped in parenthesis. `(things like this)` are interpreted as a comment.
+- A sequence of strings wrapped in parenthesis `(like, this, one)` are interpreted as a repeat sequence.
+  - if by a multiplier and then by a number `(like, this) * 3`, the sequence will be repeated 3 times as the user steps through them
+  - if not followed by both a multiplier and a number, the sequence will repeat indefinitely until the user clicks the "exit repeat" button. This is to account for conditional repeats, such as "until you reach the end of the row" while still being able to keep track of the number of repeats you have made.
+
+## Application Structure
+
+Notable files:
+- Components:
+  - `App.js`: Maintains and handles state related to pattern counts and the index of the pattern where the user currently is.
+  - `InstructionView.js`, `InstructionText.js`: Handles how the data related to the current state is intelligently displayed for the user.
+  - `ManualCounter.js`: Independent unit for if the user wants to count something else.
+  - `Counter.js`: Displays the counts. Accepts user inputs to quickly change the current count.
+- Other:
+  - `PatternLexer.js`: A module of functions for tokenization of user input and light validation of syntax.
+  - `Token.js`: Interface for using token objects that compose a pattern.
+  
+---
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
