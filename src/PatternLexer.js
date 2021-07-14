@@ -1,7 +1,7 @@
 import {TokenType, mapToToken, tokenFactory} from './Token'
 
 const PatternLexer = (function() {
-  
+
   // create an array of token arrays that represent an individual instruction
   function tokenize(rawPattern) {
 
@@ -28,6 +28,37 @@ const PatternLexer = (function() {
     ret = ret.map(tokenString => _stringsToTokens(tokenString)) 
 
     return ret;
+  }
+
+  const PTN_ERR = Object.freeze({
+    NO_INPUT: "Please input a pattern",
+    PAREN_MATCH: "One of the instructions has a mismatched count of open and closed parenthesis",
+  });
+
+  // basic validation for valid pattern instructions after tokenized
+  function isInvalid(pattern) {
+    
+    // did the user input a pattern?
+    if (!pattern[0] || !pattern[0][0]) {
+      return PTN_ERR.NO_INPUT;
+    }
+    
+    // is the number of parenthesis matched?
+    let parensMatch = true;
+    pattern.forEach( instruction => {
+      const numUnmatchedParens = instruction.reduce( (numUnmatchedParens, token) => {
+        if (token.type === TokenType.OPN_PAREN) {
+          numUnmatchedParens++;
+        } else if (token.type === TokenType.CLS_PAREN) {
+          numUnmatchedParens--;
+        }
+        return numUnmatchedParens;
+      }, 0 );
+
+      if (numUnmatchedParens !== 0) parensMatch = false;
+    })
+
+    return parensMatch ? false : PTN_ERR.PAREN_MATCH;
   }
 
   function _stringsToTokens(tokenString) {
@@ -67,17 +98,10 @@ const PatternLexer = (function() {
     return tokenArr;
   }
 
-  // give the index of the next string token in the instruction, starting from input index, or null if no more string tokens.
-  function nextStr(instruction, index) {
-    for (let i = index; i < instruction.length; i++) {
-      if (instruction[i].type === TokenType.STR) return i;
-    }
-    return null;
-  }
-
   return {
     tokenize,
-    nextStr,
+    isInvalid,
+    PTN_ERR,
   }
 
 })();

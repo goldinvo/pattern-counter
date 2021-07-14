@@ -64,6 +64,12 @@ class App extends Component {
     e.preventDefault();
     
     const pattern = PatternLexer.tokenize(this.state.patternInput);
+    const err = PatternLexer.isInvalid(pattern);
+    if (err) {
+      alert("Pattern Syntax Error: " + err + ".");
+      return;
+    } 
+
     this.setState({
       pattern: pattern,
       instrIndex: 0,
@@ -207,12 +213,16 @@ function needToRepeat(instruction, index, numRepeats) {
   if (instruction[index].type !== TokenType.CLS_PAREN) console.log("fxn needToRepeat!!!!!");
   
   // if no multiplier, repeat indefinitely within ()'s
-  if (instruction[index + 1].type !== TokenType.REP) return true;
-
-  // we have a ()xNUM
-  if (instruction[index + 2].type !== TokenType.NUM) console.log("asldkfjldkjlk");
-
-  return numRepeats < Number(instruction[index + 2].value) - 1;
+  if (instruction[index + 1] && instruction[index + 1].type !== TokenType.REP) {
+    return true;
+  }
+  
+  // (sequence) * NUM
+  if (instruction[index + 2] && instruction[index + 2].type === TokenType.NUM) {
+    return numRepeats < Number(instruction[index + 2].value) - 1;
+  }
+  
+  return false;
   
 }
 
