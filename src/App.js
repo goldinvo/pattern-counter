@@ -138,8 +138,8 @@ class App extends Component {
           </div>  
           <div className='button-menu'>
             <button onClick={this.next}>Next</button>   
-            <button onClick={this.addRepeat}>Complete Repeat</button>
-            <button onClick={this.finishRepeat}>Exit repeat</button>
+            {this.state.repeats.length > 0 ? <button onClick={this.addRepeat}>Complete Repeat</button> : null}
+            {this.state.repeats.length > 0 ? <button onClick={this.finishRepeat}>Exit repeat</button> : null}
             <button onClick={this.nextInstruction}>Next Instruction</button>
           </div>
         </div>
