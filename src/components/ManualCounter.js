@@ -14,6 +14,30 @@ class ManualCounter extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.increment = this.increment.bind(this);
     this.reset = this.reset.bind(this);
+    this.onKeyPressed = this.onKeyPressed.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener("keydown", this.onKeyPressed);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.onKeyPressed);
+  }
+
+  onKeyPressed(e) {
+    if (e.target.tagName === 'TEXTAREA') return;
+    
+    switch(e.key) {
+      case "z":
+        this.increment(1);
+        break;
+      case "x":
+        this.increment(10);
+        break;
+      default: 
+        return;
+    }
   }
 
   handleChange(e) {
@@ -44,8 +68,8 @@ class ManualCounter extends Component {
   render() {
     const controls = (
       <div id='controls' style={{display: 'flex', justifyContent: 'center'}}>
-        <button type='button' onClick={() => this.increment(1)}>+1</button>
-        <button type='button' onClick={() => this.increment(10)}>+10</button>
+        <button type='button' onClick={() => this.increment(1)}>+1 (z)</button>
+        <button type='button' onClick={() => this.increment(10)}>+10 (x)</button>
         <button type='button' onClick={this.reset}>Reset</button>
       </div>
     )

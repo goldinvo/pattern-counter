@@ -25,6 +25,35 @@ class App extends Component {
     this.finishRepeat = this.finishRepeat.bind(this);
     this.addRepeat = this.addRepeat.bind(this);
     this.handleRepeatChange = this.handleRepeatChange.bind(this);
+    this.onKeyPressed = this.onKeyPressed.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener("keydown", this.onKeyPressed);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.onKeyPressed);
+  }
+
+  onKeyPressed(e) {
+    if (e.target.tagName === 'TEXTAREA' || this.state.pattern === undefined) return;
+    
+    switch(e.key) {
+      case " ":
+        e.preventDefault();
+        this.next();
+        break;
+      case "c":
+        if (this.state.repeats.length > 0) this.addRepeat();
+        break;
+      case "v":
+        if (this.state.repeats.length > 0) this.finishRepeat();
+        break;
+      default: 
+        return;
+
+    }
   }
   
   handleFormChange(e) {
@@ -150,10 +179,10 @@ class App extends Component {
             <InstructionView instruction={this.state.pattern[this.state.instrIndex]} index={this.state.tokIndex} repeats={this.state.repeats} onRepeatChange={this.handleRepeatChange}/>
           </div>  
           <div className='button-menu'>
-            <button onClick={this.next}>Next</button>
+            <button onClick={this.next}>Next (Space)</button>
             <button onClick={this.nextInstruction}>Next Instruction</button>  
-            {this.state.repeats.length > 0 ? <button onClick={this.addRepeat}>Complete Repeat</button> : null}
-            {this.state.repeats.length > 0 ? <button onClick={this.finishRepeat}>Exit repeat</button> : null}
+            {this.state.repeats.length > 0 ? <button onClick={this.addRepeat}>Complete Repeat (c)</button> : null}
+            {this.state.repeats.length > 0 ? <button onClick={this.finishRepeat}>Exit repeat (v)</button> : null}
             
           </div>
         </div>
