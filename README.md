@@ -24,6 +24,7 @@ The pattern submitted by the user should follow the proper syntax for the app to
 The pattern input by the user should be a sequence of instructions separated by one or more line breaks. Instructions are displayed one at a time, and are composed of the instruction number, comments, sequences of strings, and parenthesis/numbers/multipliers used to denote repeats. 
 
 For example:    
+
     26. CTC, INC 10, CTB, INC * 20 (60)↵    
     27. CTC, (SC 9, INC) * 2, CTB, (SC 9, INC) * 4  (66)↵    
     ↵    
