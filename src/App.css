@@ -1,5 +1,6 @@
 .button-menu {
   display: flex;
+  flex-flow: row wrap;
   margin: 20px 10px;
 }
 

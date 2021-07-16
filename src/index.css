@@ -22,11 +22,11 @@ button:active, input[type='submit']:active {
   background-color: #a7dfdb
 }
 
+/*
+Is this a hackish structure to get a fixed sidebar??
+  - position:fixed sidebar 270px wide in top left
+  - shift everything else right 270px
+*/
 .content {
-  position: absolute;
-  display: flex;
-  top: 0px;
-  left: 270px;
-  z-index: -1;
-  width: 100% - 270px;
+  margin-left: 270px;
 }

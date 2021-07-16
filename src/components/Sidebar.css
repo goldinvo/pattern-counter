@@ -4,10 +4,53 @@
   left: 0px;
   height: 100vh;
   width: 270px;
-  background-color: #b9e4e6;
-  text-align: right;
+  background-color: #ccfdfa;
+  border-right: solid;
+  border-width: 2px;
+  border-color: #b0dfdb;
+
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+}
+
+.header {
+  display: flex;
+  flex-flow: column nowrap;
+  padding: 15px 10px;
+}
+
+.header div {
+  margin-bottom: 5px;
+}
+
+.header #title {
+  font-size: 35px;
+}
+
+.sidebar .link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-decoration: none;
+  color: black;
+  font-size: 25px;
+
+
+  border-top: solid;
+  border-color: #b0dfdb;
+  border-width: 2px;
+
+  padding: 10px;
+}
+
+.sidebar .link:hover {
+  background-color: #a7dfdb;
 }
 
 .sidebar img{
-  width: 10px;
+  width: 55px;
+  margin-right: 10px;
 }

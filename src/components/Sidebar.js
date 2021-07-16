@@ -5,12 +5,12 @@ import './Sidebar.css'
 function Sidebar(props) {
   return (
     <aside className='sidebar'>
-      <header>
-        <span id='title'>{props.title}</span>
+      <div className='header'>
+        <div id='title'>{props.title}</div>
         <div>{props.description}</div>  
-      </header>
-      <div>{props.info}</div>
-      <a href='https://goldinvo.com'>
+        <div>{props.info}</div>
+      </div>
+      <a href='https://goldinvo.com' class='link'>
         <img src={logo} alt=''></img>
         goldinvo.com
       </a>

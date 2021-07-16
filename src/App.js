@@ -10,7 +10,26 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      patternInput: "",
+      patternInput: `Press the 'Next' button or spacebar to advance!
+
+4. sc 3, hdc, dc 3, hdc, sc 3
+5. (sc 3, dc 5) * 3 (24 sts) (parenthesis without commas or periods are ignored)
+
+On the next instruction try using the 'Complete Repeat' button! 
+
+6. ((sc 2, dec) * 5, sc) * 3
+
+You can also type into the counter display to edit counts directly!
+
+7. ((sc, dc, sc) * 594, sc 3, dc 2) * 2 (Click on the orange counter number and type in something else)
+
+Switch to a G hook (Instructions don't have to start with a number)
+
+You will need to use the 'Exit repeat' button in the next instruction
+
+8. (sc 3, picot) until end of row, sc, hdc, dc
+
+Cut and weave in ends (Now try your own pattern!)`,
       pattern: undefined,
       instrIndex: 0,
       tokIndex: 0,
@@ -196,10 +215,12 @@ class App extends Component {
             <InstructionView instruction={this.state.pattern[this.state.instrIndex]} tokIndex={this.state.tokIndex} repeats={this.state.repeats} onRepeatChange={this.handleRepeatChange}/>
           </div>  
           <div className='button-menu'>
-            <button onClick={this.next}>Next (Space)</button>
-            <button onClick={this.nextInstruction}>Next Instruction</button>  
+            <button onClick={this.next}>Next (Space)</button> 
             {this.state.repeats.length > 0 ? <button onClick={this.addRepeat}>Complete Repeat (c)</button> : null}
             {this.state.repeats.length > 0 ? <button onClick={this.finishRepeat}>Exit repeat (v)</button> : null}
+          </div>
+          <div className='button-menu'>
+            <button onClick={this.nextInstruction}>Next Instruction</button>
           </div>
         </div>
       )
