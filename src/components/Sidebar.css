@@ -1,0 +1,13 @@
+.sidebar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  height: 100vh;
+  width: 270px;
+  background-color: #b9e4e6;
+  text-align: right;
+}
+
+.sidebar img{
+  width: 10px;
+}

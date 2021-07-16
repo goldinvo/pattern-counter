@@ -22,3 +22,11 @@ button:active, input[type='submit']:active {
   background-color: #a7dfdb
 }
 
+.content {
+  position: absolute;
+  display: flex;
+  top: 0px;
+  left: 270px;
+  z-index: -1;
+  width: 100% - 270px;
+}
