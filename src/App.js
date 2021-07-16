@@ -6,11 +6,8 @@ import {TokenType} from './Token'
 
 import './App.css';
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      patternInput: `Press the 'Next' button or spacebar to advance!
+// these examples will be put below the form for the user to learn syntax
+const EXAMPLE_TXT_1 = `Press the 'Next' button or spacebar to advance!
 
 4. sc 3, hdc, dc 3, hdc, sc 3
 5. (sc 3, dc 5) * 3 (24 sts) (parenthesis without commas or periods are ignored)
@@ -29,13 +26,24 @@ You will need to use the 'Exit repeat' button in the next instruction
 
 8. (sc 3, picot) until end of row, sc, hdc, dc
 
-Cut and weave in ends (Now try your own pattern!)`,
+Cut and weave in ends (Now try your own pattern!)`
+
+const EXAMPLE_TXT_2 = '';
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      patternInput: '',
       pattern: undefined,
       instrIndex: 0,
       tokIndex: 0,
       finished: false,
-      repeats: [],
+      repeats: [],     // {index, numRepeats}
+      previousStates: [], // {instrIndex, tokIndex, finished, repeats} !!! shallow copies !!!
     }
+
+    this.initialize = this.initialize.bind(this);
     this.handleFormChange = this.handleFormChange.bind(this);
     this.handleFormSubmit = this.handleFormSubmit.bind(this);
     this.next = this.next.bind(this);
@@ -44,6 +52,19 @@ Cut and weave in ends (Now try your own pattern!)`,
     this.addRepeat = this.addRepeat.bind(this);
     this.handleRepeatChange = this.handleRepeatChange.bind(this);
     this.onKeyPressed = this.onKeyPressed.bind(this);
+    this.undo = this.undo.bind(this);
+  }
+
+  initialize(patternInput) {
+    this.setState({
+      patternInput: patternInput,
+      pattern: undefined,
+      instrIndex: 0,
+      tokIndex: 0,
+      finished: false,
+      repeats: [],
+      previousStates: [],
+    });
   }
 
   componentDidMount() {
@@ -92,10 +113,6 @@ Cut and weave in ends (Now try your own pattern!)`,
 
     this.setState({
       pattern: pattern,
-      instrIndex: 0,
-      tokIndex: 0,
-      finished: false,
-      repeats: [],
     }, () => {
       if (pattern[0][0].type !== TokenType.STR) this.next(); // start on first string
     }); 
@@ -105,6 +122,7 @@ Cut and weave in ends (Now try your own pattern!)`,
   // advance to next string. Use transState and transNext to quickly advance state multiple times
   // synchronously. 
   next() {
+    this.saveState();
     this.setState( prevState => {
 
       let transState = {
@@ -124,6 +142,7 @@ Cut and weave in ends (Now try your own pattern!)`,
   // complete 1 repeat. Do this by advancing (next()) over and over until we see that the repeat
   // array in state has changed. Use transState/transNext to quickly advance through state synchronously.
   addRepeat() {
+    this.saveState();
     // go 'next()' until repeat status in state changes
     this.setState( prevState => {
 
@@ -151,6 +170,7 @@ Cut and weave in ends (Now try your own pattern!)`,
   // breka out of current repeat by setting current index ahead of next ')' and 
   // popping the repeat stack.
   finishRepeat() {
+    this.saveState();
     const instruction = this.state.pattern[this.state.instrIndex];
     let i = this.state.tokIndex;
     do {
@@ -167,6 +187,7 @@ Cut and weave in ends (Now try your own pattern!)`,
 
   // skip to next instruction in the pattern
   nextInstruction() {
+    this.saveState();
     const pattern = this.state.pattern;
     if(this.state.instrIndex >= pattern.length - 1) {
       // already at last pattern
@@ -190,6 +211,7 @@ Cut and weave in ends (Now try your own pattern!)`,
 
   // change count inside of repeats[index] when user manually changes it.
   handleRepeatChange(index, event) {
+    this.saveState();
     let newVal = event.target.value;
     if (newVal.match(/\D/)) {
       // Don't accept non-numeric chars
@@ -205,33 +227,62 @@ Cut and weave in ends (Now try your own pattern!)`,
     return;
   }
 
+  //
+  saveState() {
+    this.setState( prevState => {
+      let ret = JSON.parse(JSON.stringify(prevState.previousStates));
+      ret.push({
+        instrIndex: prevState.instrIndex,
+        tokIndex: prevState.tokIndex,
+        finished: prevState.finished,
+        repeats: JSON.parse(JSON.stringify(prevState.repeats)),
+      })
+
+      return {
+        previousStates: ret,
+      }
+    })
+  }
+
+  
+  undo() {
+    let previousStates = JSON.parse(JSON.stringify(this.state.previousStates));
+    
+    this.setState(
+      {...previousStates.pop(), previousStates: previousStates} // [].pop() undefined
+    )
+  }
+
   render() {
-    let display = null;
-    // has pattern been inputted by user yet? do we have any repeats (if not, don't display repeat buttons)? 
-    if (this.state.pattern !== undefined) {
-      display = (
+    return this.state.pattern !== undefined 
+      ? (
         <div>
           <div>
-            <InstructionView instruction={this.state.pattern[this.state.instrIndex]} tokIndex={this.state.tokIndex} repeats={this.state.repeats} onRepeatChange={this.handleRepeatChange}/>
-          </div>  
+            <InstructionView 
+            instruction={this.state.pattern[this.state.instrIndex]} 
+            tokIndex={this.state.tokIndex} 
+            repeats={this.state.repeats} 
+            onRepeatChange={this.handleRepeatChange}
+            finished={this.state.finished}
+            />
+          </div>
           <div className='button-menu'>
-            <button onClick={this.next}>Next (Space)</button> 
+            <button onClick={this.next}>Next (Space)</button>
             {this.state.repeats.length > 0 ? <button onClick={this.addRepeat}>Complete Repeat (c)</button> : null}
             {this.state.repeats.length > 0 ? <button onClick={this.finishRepeat}>Exit repeat (v)</button> : null}
           </div>
           <div className='button-menu'>
+            <button onClick={this.undo}>Undo (ctrl-z)</button>
             <button onClick={this.nextInstruction}>Next Instruction</button>
+            <button onClick={()=>{this.initialize(this.state.patternInput)}}>Submit Anonther Pattern</button>
           </div>
         </div>
+      ) : (
+        <div>
+          <PatternForm value={this.state.patternInput} onChange={this.handleFormChange} onSubmit={this.handleFormSubmit}/>
+          <div>{EXAMPLE_TXT_1}</div>
+        </div>
       )
-    }
-    
-    return (
-      <div>
-        {display}
-        <PatternForm value={this.state.patternInput} onChange={this.handleFormChange} onSubmit={this.handleFormSubmit}/>
-      </div>  
-    );
   }
 }
 
