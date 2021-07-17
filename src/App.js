@@ -32,7 +32,9 @@ Cut and weave in ends (Now try your own pattern!)
 class App extends Component {
   constructor() {
     super();
-    this.state = {
+    
+    let storedState = JSON.parse(localStorage.getItem('patternCounterState'));
+    this.state = storedState ? storedState : {
       patternInput: EXAMPLE_TXT,
       pattern: undefined,
       instrIndex: 0,
@@ -40,7 +42,8 @@ class App extends Component {
       finished: false,
       repeats: [],     // {index, numRepeats}
       previousStates: [], // {instrIndex, tokIndex, finished, repeats}
-    }
+    } 
+
 
     this.initialize = this.initialize.bind(this);
     this.handleFormChange = this.handleFormChange.bind(this);
@@ -229,6 +232,7 @@ class App extends Component {
   saveAndDo(func) {
     this.saveState();
     func();
+    this.storeState();
   }
 
   // save relevant parts of state in previousStates stack for undo();
@@ -246,6 +250,11 @@ class App extends Component {
         previousStates: ret,
       }
     })
+  }
+
+  // save the current state using web storage api
+  storeState() {
+    localStorage.setItem('patternCounterState', JSON.stringify(this.state));
   }
 
   // restore state to top of previousState stack

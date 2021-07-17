@@ -13,7 +13,7 @@ ReactDOM.render(
       description='Keep track of your place in your knitting or crochet pattern!'
       info={
         <div>
-          <p>Start by putting inputting your pattern in the correct syntax. See the given examples, or visit my <a href='https://goldinvo.com'>blog post</a> for details.</p>
+          <p>Start by putting inputting your pattern in the correct syntax. Visit my <a href='https://goldinvo.com'>blog post</a> for examples and usage details.</p>
         </div>   
       }
     />
