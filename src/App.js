@@ -263,7 +263,7 @@ class App extends Component {
     
     this.setState(
       {...previousStates.pop(), previousStates: previousStates} // [].pop() undefined
-    )
+    , () => this.storeState())
   }
 
   render() {
