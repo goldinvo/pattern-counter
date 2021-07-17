@@ -32,7 +32,7 @@ class ManualCounter extends Component {
     
     switch(e.key) {
       case "z":
-        this.increment(1);
+        if (!e.ctrlKey) this.increment(1); // avoid conflict with undo feature of main app
         break;
       case "x":
         this.increment(10);

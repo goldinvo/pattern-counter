@@ -39,7 +39,7 @@ class App extends Component {
       tokIndex: 0,
       finished: false,
       repeats: [],     // {index, numRepeats}
-      previousStates: [], // {instrIndex, tokIndex, finished, repeats} !!! shallow copies !!!
+      previousStates: [], // {instrIndex, tokIndex, finished, repeats}
     }
 
     this.initialize = this.initialize.bind(this);
@@ -92,7 +92,7 @@ class App extends Component {
         if (this.state.repeats.length > 0) this.saveAndDo(this.finishRepeat);
         break;
       case "z":
-        if (e.ctrlKey) this.saveAndDo(this.undo);
+        if (e.ctrlKey) this.undo();
         break; 
       default: 
         return;
@@ -276,7 +276,7 @@ class App extends Component {
             {this.state.repeats.length > 0 ? <button onClick={() => this.saveAndDo(this.finishRepeat)}>Exit repeat (v)</button> : null}
           </div>
           <div className='button-menu'>
-            <button onClick={() => this.saveAndDo(this.undo)}>Undo (ctrl-z)</button>
+            <button onClick={this.undo}>Undo (ctrl-z)</button>
             <button onClick={() => this.saveAndDo(this.nextInstruction)}>Next Instruction</button>
             <button onClick={() => this.initialize(this.state.patternInput)}>Submit Anonther Pattern</button>
           </div>
