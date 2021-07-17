@@ -7,7 +7,7 @@ import {TokenType} from './Token'
 import './App.css';
 
 // these examples will be put below the form for the user to learn syntax
-const EXAMPLE_TXT_1 = `Press the 'Next' button or spacebar to advance!
+const EXAMPLE_TXT = `Press the 'Next' button or spacebar to advance!
 
 4. sc 3, hdc, dc 3, hdc, sc 3
 5. (sc 3, dc 5) * 3 (24 sts) (parenthesis without commas or periods are ignored)
@@ -26,15 +26,14 @@ You will need to use the 'Exit repeat' button in the next instruction
 
 8. (sc 3, picot) until end of row, sc, hdc, dc
 
-Cut and weave in ends (Now try your own pattern!)`
-
-const EXAMPLE_TXT_2 = '';
+Cut and weave in ends (Now try your own pattern!)
+`
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      patternInput: '',
+      patternInput: EXAMPLE_TXT,
       pattern: undefined,
       instrIndex: 0,
       tokIndex: 0,
@@ -53,6 +52,7 @@ class App extends Component {
     this.handleRepeatChange = this.handleRepeatChange.bind(this);
     this.onKeyPressed = this.onKeyPressed.bind(this);
     this.undo = this.undo.bind(this);
+    this.saveAndDo = this.saveAndDo.bind(this);
   }
 
   initialize(patternInput) {
@@ -83,14 +83,17 @@ class App extends Component {
     switch(e.key) {
       case " ":
         e.preventDefault();
-        this.next();
+        this.saveAndDo(this.next);
         break;
       case "c":
-        if (this.state.repeats.length > 0) this.addRepeat();
+        if (this.state.repeats.length > 0) this.saveAndDo(this.addRepeat);
         break;
       case "v":
-        if (this.state.repeats.length > 0) this.finishRepeat();
+        if (this.state.repeats.length > 0) this.saveAndDo(this.finishRepeat);
         break;
+      case "z":
+        if (e.ctrlKey) this.saveAndDo(this.undo);
+        break; 
       default: 
         return;
     }
@@ -122,7 +125,6 @@ class App extends Component {
   // advance to next string. Use transState and transNext to quickly advance state multiple times
   // synchronously. 
   next() {
-    this.saveState();
     this.setState( prevState => {
 
       let transState = {
@@ -142,7 +144,6 @@ class App extends Component {
   // complete 1 repeat. Do this by advancing (next()) over and over until we see that the repeat
   // array in state has changed. Use transState/transNext to quickly advance through state synchronously.
   addRepeat() {
-    this.saveState();
     // go 'next()' until repeat status in state changes
     this.setState( prevState => {
 
@@ -170,7 +171,6 @@ class App extends Component {
   // breka out of current repeat by setting current index ahead of next ')' and 
   // popping the repeat stack.
   finishRepeat() {
-    this.saveState();
     const instruction = this.state.pattern[this.state.instrIndex];
     let i = this.state.tokIndex;
     do {
@@ -187,7 +187,6 @@ class App extends Component {
 
   // skip to next instruction in the pattern
   nextInstruction() {
-    this.saveState();
     const pattern = this.state.pattern;
     if(this.state.instrIndex >= pattern.length - 1) {
       // already at last pattern
@@ -211,7 +210,6 @@ class App extends Component {
 
   // change count inside of repeats[index] when user manually changes it.
   handleRepeatChange(index, event) {
-    this.saveState();
     let newVal = event.target.value;
     if (newVal.match(/\D/)) {
       // Don't accept non-numeric chars
@@ -227,7 +225,13 @@ class App extends Component {
     return;
   }
 
-  //
+  // Save state only when user directly interact with methods.
+  saveAndDo(func) {
+    this.saveState();
+    func();
+  }
+
+  // save relevant parts of state in previousStates stack for undo();
   saveState() {
     this.setState( prevState => {
       let ret = JSON.parse(JSON.stringify(prevState.previousStates));
@@ -244,7 +248,7 @@ class App extends Component {
     })
   }
 
-  
+  // restore state to top of previousState stack
   undo() {
     let previousStates = JSON.parse(JSON.stringify(this.state.previousStates));
     
@@ -262,25 +266,24 @@ class App extends Component {
             instruction={this.state.pattern[this.state.instrIndex]} 
             tokIndex={this.state.tokIndex} 
             repeats={this.state.repeats} 
-            onRepeatChange={this.handleRepeatChange}
+            onRepeatChange={(index, event) => this.saveAndDo(() => this.handleRepeatChange(index, event))}
             finished={this.state.finished}
             />
           </div>
           <div className='button-menu'>
-            <button onClick={this.next}>Next (Space)</button>
-            {this.state.repeats.length > 0 ? <button onClick={this.addRepeat}>Complete Repeat (c)</button> : null}
-            {this.state.repeats.length > 0 ? <button onClick={this.finishRepeat}>Exit repeat (v)</button> : null}
+            <button onClick={() => this.saveAndDo(this.next)}>Next (Space)</button>
+            {this.state.repeats.length > 0 ? <button onClick={() => this.saveAndDo(this.addRepeat)}>Complete Repeat (c)</button> : null}
+            {this.state.repeats.length > 0 ? <button onClick={() => this.saveAndDo(this.finishRepeat)}>Exit repeat (v)</button> : null}
           </div>
           <div className='button-menu'>
-            <button onClick={this.undo}>Undo (ctrl-z)</button>
-            <button onClick={this.nextInstruction}>Next Instruction</button>
-            <button onClick={()=>{this.initialize(this.state.patternInput)}}>Submit Anonther Pattern</button>
+            <button onClick={() => this.saveAndDo(this.undo)}>Undo (ctrl-z)</button>
+            <button onClick={() => this.saveAndDo(this.nextInstruction)}>Next Instruction</button>
+            <button onClick={() => this.initialize(this.state.patternInput)}>Submit Anonther Pattern</button>
           </div>
         </div>
       ) : (
         <div>
           <PatternForm value={this.state.patternInput} onChange={this.handleFormChange} onSubmit={this.handleFormSubmit}/>
-          <div>{EXAMPLE_TXT_1}</div>
         </div>
       )
   }
