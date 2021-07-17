@@ -14,13 +14,13 @@ const FINISHED = [{type: TokenType.STR, value: "Pattern Finished!"}]
 //
 // properties: instruction, tokIndex, repeats (array), onRepeatChange (handle change in # of repeats in counter), finished
 function InstructionView(props) {
-  // if (props.finished) {
-  //   return <InstructionText 
-  //     instruction={FINISHED}
-  //     tokIndex='0'
-  //     colors={COLORS}
-  //   />
-  // }
+  if (props.finished) {
+    return <InstructionText 
+      instruction={FINISHED}
+      tokIndex={0}
+      colors={COLORS}
+    />
+  }
   
   let repeatCounters = props.repeats.map( (repeatElement, index) => {
     let color = index < COLORS.length ? COLORS[index] : COLORS[COLORS.length - 1];

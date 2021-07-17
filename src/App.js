@@ -258,8 +258,26 @@ class App extends Component {
   }
 
   render() {
-    return this.state.pattern !== undefined 
-      ? (
+    if (this.state.pattern === undefined) {
+      // user needs to input pattern
+      return (
+        <div>
+          <PatternForm value={this.state.patternInput} onChange={this.handleFormChange} onSubmit={this.handleFormSubmit}/>
+        </div>
+      )
+
+    } else if (this.state.finished) {
+      return (
+        <div>
+          <InstructionView finished={true}/> 
+          <div className='button-menu'>
+            <button onClick={this.undo}>Undo (ctrl-z)</button>
+            <button onClick={() => this.initialize(this.state.patternInput)}>Submit Anonther Pattern</button>
+          </div>
+        </div>
+      )
+    } else {
+      return (
         <div>
           <div>
             <InstructionView 
@@ -281,11 +299,8 @@ class App extends Component {
             <button onClick={() => this.initialize(this.state.patternInput)}>Submit Anonther Pattern</button>
           </div>
         </div>
-      ) : (
-        <div>
-          <PatternForm value={this.state.patternInput} onChange={this.handleFormChange} onSubmit={this.handleFormSubmit}/>
-        </div>
       )
+    }
   }
 }
 
