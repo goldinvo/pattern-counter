@@ -10,7 +10,7 @@ function Sidebar(props) {
         <div>{props.description}</div>  
         <div>{props.info}</div>
       </div>
-      <a href='https://goldinvo.com' class='link'>
+      <a href='https://goldinvo.com' className='link'>
         <img src={logo} alt=''></img>
         goldinvo.com
       </a>

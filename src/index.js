@@ -17,7 +17,7 @@ ReactDOM.render(
         </div>   
       }
     />
-    <div class='content'><App /></div>
+    <div className='content'><App /></div>
   </React.StrictMode>,
   document.getElementById('root')
 );

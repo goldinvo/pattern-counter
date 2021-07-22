@@ -1,3 +1,4 @@
+import React from 'react'
 import './Counter.css'
 
 // Display for counts that can be changed by the user
