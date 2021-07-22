@@ -14,7 +14,7 @@ const EXAMPLE_TXT = `Press the 'Next' button or spacebar to advance!
 
 On the next instruction try using the 'Complete Repeat' button! 
 
-6. ((sc 2, dec) * 5, sc) * 3
+6. ((sc 2, dec, sc 2, dec) * 5, sc) * 3
 
 You can also type into the counter display to edit counts directly!
 
@@ -179,13 +179,26 @@ class App extends Component {
     do {
       i++
     } while (instruction[i].type !== TokenType.CLS_PAREN);
-  
-    this.setState({
-      tokIndex: i + 1,
-      repeats: JSON.parse(JSON.stringify(this.state.repeats.slice(0, -1))),
-    }, () => {
-      if (instruction[i + 1].type !== TokenType.STR) this.next(); // leave us off at next string
-    })
+    i++
+
+    // instruction[i] is token directly after ')'. move on to next token/instruction and pop repeat stack.
+    if (!instruction[i]) {
+      // need to move on to next instruction
+      this.setState({
+        instrIndex: this.state.instrIndex + 1,
+        tokIndex: 0,
+        repeats: [],
+      }, () => {
+        if (instruction[this.state.instrIndex].type !== TokenType.STR) this.next(); // leave us off at next string
+      })
+    } else {
+      this.setState({
+        tokIndex: i,
+        repeats: JSON.parse(JSON.stringify(this.state.repeats.slice(0, -1))),
+      }, () => {
+        if (instruction[i].type !== TokenType.STR) this.next(); // leave us off at next string
+      })
+    }
   }
 
   // skip to next instruction in the pattern
