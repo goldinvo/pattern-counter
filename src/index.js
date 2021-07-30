@@ -13,7 +13,13 @@ ReactDOM.render(
       description='Keep track of your place in your knitting or crochet pattern!'
       info={
         <div>
-          <p>Start by putting inputting your pattern in the correct syntax. Visit my <a href='https://goldinvo.com'>blog post</a> for examples and usage details.</p>
+          <p>
+            Start by putting inputting your pattern using the pattern counter syntax. 
+            Visit my <a href='https://goldinvo.com/2021/07/22/pattern-counter.html'>blog post</a> for examples and usage details.
+          </p>
+          <p>
+            Please send any questions, comments/feedback, or bug reports my way! I would much appreciate it: goldin@goldinvo.com
+          </p>
         </div>   
       }
     />

@@ -54,6 +54,8 @@ Notable files:
 
 ---
 
+run `npm run deploy` to host on github pages
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
