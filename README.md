@@ -1,7 +1,7 @@
 
 # Pattern Counter
 
-See my [blog post](https://goldinvo.com/2021/07/22/pattern-counter.html){:target="_blank" on using this app
+See my [blog post](https://goldinvo.com/2021/07/22/pattern-counter.html){:target="_blank"} on using this app
 
 An interactive tool for knitters and crocheters that parses/decomposes patterns and keeps track of repeat counts so that it is easier for the user to keep track of their place in a pattern. 
 
