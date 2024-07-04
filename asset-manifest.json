@@ -1,21 +1,14 @@
 {
   "files": {
-    "main.css": "/pattern-counter/static/css/main.203d83dc.chunk.css",
-    "main.js": "/pattern-counter/static/js/main.1ef442af.chunk.js",
-    "main.js.map": "/pattern-counter/static/js/main.1ef442af.chunk.js.map",
-    "runtime-main.js": "/pattern-counter/static/js/runtime-main.d3220d3a.js",
-    "runtime-main.js.map": "/pattern-counter/static/js/runtime-main.d3220d3a.js.map",
-    "static/js/2.f7ea855f.chunk.js": "/pattern-counter/static/js/2.f7ea855f.chunk.js",
-    "static/js/2.f7ea855f.chunk.js.map": "/pattern-counter/static/js/2.f7ea855f.chunk.js.map",
+    "main.css": "/pattern-counter/static/css/main.8a619c8d.css",
+    "main.js": "/pattern-counter/static/js/main.302be833.js",
+    "static/media/saucyboy.svg": "/pattern-counter/static/media/saucyboy.1dc1fe53703ee4b649cc5fa83bcf7547.svg",
     "index.html": "/pattern-counter/index.html",
-    "static/css/main.203d83dc.chunk.css.map": "/pattern-counter/static/css/main.203d83dc.chunk.css.map",
-    "static/js/2.f7ea855f.chunk.js.LICENSE.txt": "/pattern-counter/static/js/2.f7ea855f.chunk.js.LICENSE.txt",
-    "static/media/saucyboy.1dc1fe53.svg": "/pattern-counter/static/media/saucyboy.1dc1fe53.svg"
+    "main.8a619c8d.css.map": "/pattern-counter/static/css/main.8a619c8d.css.map",
+    "main.302be833.js.map": "/pattern-counter/static/js/main.302be833.js.map"
   },
   "entrypoints": [
-    "static/js/runtime-main.d3220d3a.js",
-    "static/js/2.f7ea855f.chunk.js",
-    "static/css/main.203d83dc.chunk.css",
-    "static/js/main.1ef442af.chunk.js"
+    "static/css/main.8a619c8d.css",
+    "static/js/main.302be833.js"
   ]
 }
